@@ -4,24 +4,23 @@
 #include "Common.h"
 
 namespace PaymentCore {
-	struct Account { //структура аккаунта
+	struct Account { //СЃС‚СЂСѓРєС‚СѓСЂР° Р°РєРєР°СѓРЅС‚Р°
 		int id;
 		char ownerName[MAX_NAME_LEN];
 		double balance;
 		bool isActive;
 	};
 
-	struct AccountNode {//структура для динамического списка
+	struct AccountNode {//СЃС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РґРёРЅР°РјРёС‡РµСЃРєРѕРіРѕ СЃРїРёСЃРєР°
 		Account data;
 		AccountNode* next;
 	};
 
-	Account createAccount(int id, const char* name, double initialBalance);//функция создания аккаунта
-	void printAccount(const Account& acc);//вывод данных аккаунта
-
-	void addAccountNode(AccountNode*& head, const Account& acc);//добавление аккаунта в динамический список
-	AccountNode* findAccountById(AccountNode* head, int id);//поиск аккаунта по id
-	void clearList(AccountNode*& head);//очистка динамической памяти
+	Account createAccount(int id, const char* name, double initialBalance);//С„СѓРЅРєС†РёСЏ СЃРѕР·РґР°РЅРёСЏ Р°РєРєР°СѓРЅС‚Р°
+	void printAccount(const Account& acc);//РІС‹РІРѕРґ РґР°РЅРЅС‹С… Р°РєРєР°СѓРЅС‚Р°
+	void addAccountNode(AccountNode*& head, const Account& acc);//РґРѕР±Р°РІР»РµРЅРёРµ Р°РєРєР°СѓРЅС‚Р° РІ РґРёРЅР°РјРёС‡РµСЃРєРёР№ СЃРїРёСЃРѕРє
+	AccountNode* findAccountById(AccountNode* head, int id);//РїРѕРёСЃРє Р°РєРєР°СѓРЅС‚Р° РїРѕ id
+	void clearList(AccountNode*& head);//РѕС‡РёСЃС‚РєР° РґРёРЅР°РјРёС‡РµСЃРєРѕР№ РїР°РјСЏС‚Рё
 
 }
 
