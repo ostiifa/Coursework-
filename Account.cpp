@@ -6,13 +6,13 @@ namespace PaymentCore {
 	Account createAccount(int id, const char* name, double initialBalance) {//описание функции создания аккаунта
 		Account newAcc;
 		newAcc.id = id;
-		newAcc.balance = balance;
+		newAcc.balance = initialBalance;
 		newAcc.isActive = true;
 
 		#ifdef _MSC_VER 
 			strcpy_s(newAcc.ownerName, MAX_NAME_LEN, name);
 		#else
-			std:strpy_s(newAcc.ownerName, name, MAX_NAME_LEN - 1);
+			std::strcpy_s(newAcc.ownerName, name, MAX_NAME_LEN - 1);
 			newAcc.ownerName[MAX_NAME_LEN - 1] = '\0';
 		#endif
 
@@ -43,7 +43,7 @@ namespace PaymentCore {
 		current->next = newNode;
 	}
 
-	AccountNode* findAccountById(AccountNote* head, int id) {//поиск по id
+	AccountNode* findAccountById(AccountNode* head, int id) {//поиск по id
 		AccountNode* current = head;
 		while (current != nullptr) {
 			if (current->data.id == id && current->data.isActive) {
@@ -61,8 +61,8 @@ namespace PaymentCore {
 			AccountNode* nextNode = current->next;
 			delete current;
 			current = nextNode;
-			count++
-		}
+			count++;
+		};
 		head = nullptr;
 		std::cout << "[System Log] Очищено узлов в памяти: " << count << std::endl;
 	}
