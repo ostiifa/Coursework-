@@ -3,10 +3,10 @@
 
 #include <string>
 #include <fstream>
-#include "Common.h" //Нужен для доступа к константам, если потребуется
+#include "Common.h" // нужен для доступа к константам, если потребуется
 
 namespace PaymentCore {
-    // Структура для записи транзакции в файл
+    // структура для записи транзакции в файл
     struct TransactionRecord {
         int id;
         int senderId;
@@ -16,12 +16,12 @@ namespace PaymentCore {
         char currency[4];
     };
 
-    // Класс бинарного хранилища
+    // класс бинарного хранилища
     class Storage {
     private:
         std::string filename;
-        // Приватный шаблонный метод сортировки (Сортировка вставками / Insertion Sort)
-        // Работает с любым типом данных и кастомным компаратором
+        // приватный шаблонный метод сортировки (сортировка вставками)
+        // работает с любым типом данных и кастомным компаратором
         template<typename T, typename Compare>
         void insertionSort(T* arr, int size, Compare comp) {
             for (int i = 1; i < size; ++i) {
@@ -40,9 +40,9 @@ namespace PaymentCore {
         bool readTransaction(int index, TransactionRecord& record);
         int getTransactionsCount();
         int getUserTransactionsCount(int userId);
-        // Получение истории транзакций конкретного пользователя
+        // получение истории транзакций конкретного пользователя
         bool getUserHistory(int userId, TransactionRecord*& outArray, int& outSize);
-        // Публичный интерфейс для запуска сортировки истории по времени
+        // публичный интерфейс для запуска сортировки истории по времени
         void sortTransactionsByTimestamp(TransactionRecord* arr, int size, bool ascending = true);
     };
 }
