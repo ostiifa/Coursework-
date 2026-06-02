@@ -44,6 +44,11 @@ namespace PaymentCore {
         bool getUserHistory(int userId, TransactionRecord*& outArray, int& outSize);
         // публичный интерфейс для запуска сортировки истории по времени
         void sortTransactionsByTimestamp(TransactionRecord* arr, int size, bool ascending = true);
+        bool writeAccount(int index, const Account& acc);
+        bool readAccount(int index, Account& acc);
+        double getTotalVolume();
+        double auditUserBalance(int userId);
+        bool validateStorageIntegrity();
     };
 }
 
