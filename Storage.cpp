@@ -77,19 +77,79 @@ namespace PaymentCore {
         }
         return true;
     }
-    // компараторы для кастомной сортировки (лямбда-выражения или структуры-предикаты)
+    // компараторы для кастомной сортировки
     void Storage::sortTransactionsByTimestamp(TransactionRecord* arr, int size, bool ascending) {
         if (ascending) {
-            // предикат: "левый элемент больше правого" -> меняем местами (сортировка по возрастанию)
+            // сортировка по возрастанию
             insertionSort(arr, size, [](const TransactionRecord& a, const TransactionRecord& b) {
                 return a.timestamp > b.timestamp;
                 });
         }
         else {
-            // предикат: "левый элемент меньше правого" -> меняем местами (сортировка по убыванию)
+            // сортировка по убыванию
             insertionSort(arr, size, [](const TransactionRecord& a, const TransactionRecord& b) {
                 return a.timestamp < b.timestamp;
                 });
         }
+        bool Storage::writeAccount(int index, const Account& acc) {
+        std::ofstream out(filename, std::ios::binary | std::ios::in | std::ios::out);
+        if (!out.is_open()) {
+            // Если файла еще нет, создаем его чистым
+            out.open(filename, std::ios::binary | std::ios::out);
+            if (!out.is_open()) return false;
+        }
+        out.seekp(index * sizeof(Account), std::ios::beg);
+        out.write(reinterpret_cast<const char*>(&acc), sizeof(Account));
+        return out.good();
+    }
+
+    bool Storage::readAccount(int index, Account& acc) {
+        std::ifstream in(filename, std::ios::binary);
+        if (!in.is_open()) return false;
+        
+        in.seekg(index * sizeof(Account), std::ios::beg);
+        if (in.fail()) return false;
+        
+        in.read(reinterpret_cast<char*>(&acc), sizeof(Account));
+        return in.gcount() == sizeof(Account);
+    }
+    double Storage::getTotalVolume() {
+        std::ifstream in(filename, std::ios::binary);
+        if (!in.is_open()) return 0.0;
+
+        double totalVolume = 0.0;
+        TransactionRecord temp;
+        while (in.read(reinterpret_cast<char*>(&temp), sizeof(TransactionRecord))) {
+            if (temp.senderId != 0 && temp.receiverId != 0) {
+                totalVolume += temp.amount;
+            }
+        }
+        return totalVolume;
+    }
+
+    double Storage::auditUserBalance(int userId) {
+        std::ifstream in(filename, std::ios::binary);
+        if (!in.is_open()) return 0.0;
+
+        double incoming = 0.0;
+        double outgoing = 0.0;
+        TransactionRecord temp;
+
+        while (in.read(reinterpret_cast<char*>(&temp), sizeof(TransactionRecord))) {
+            if (temp.senderId == userId) {
+                outgoing += temp.amount;
+            }
+            if (temp.receiverId == userId) {
+                incoming += temp.amount;
+            }
+        }
+        return incoming - outgoing;
+    }
+
+    bool Storage::validateStorageIntegrity() {
+        std::ifstream in(filename, std::ios::binary | std::ios::ate);
+        if (!in.is_open()) return true; 
+        std::streampos fileSize = in.tellg();
+        return (fileSize % sizeof(TransactionRecord)) == 0;
     }
 }
