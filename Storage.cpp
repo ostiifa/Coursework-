@@ -2,10 +2,10 @@
 #include <iostream>
 
 namespace PaymentCore {
-    // Конструктор: запоминаем путь к файлу базы данных
+    //запоминаем путь к файлу базы данных
     Storage::Storage(const std::string& dbPath) : filename(dbPath) {}
 
-    // Функция записи транзакции в бинарный файл
+    // функция записи транзакции в бинарный файл
     bool Storage::writeTransaction(const TransactionRecord& record) {
         std::ofstream out(filename, std::ios::binary | std::ios::app);
         if (!out.is_open()) return false;
@@ -14,27 +14,27 @@ namespace PaymentCore {
         return true;
     }
 
-    // Функция чтения транзакции по индексу (номеру)
+    // функция чтения транзакции по индексу (номеру)
     bool Storage::readTransaction(int index, TransactionRecord& record) {
         std::ifstream in(filename, std::ios::binary);
         if (!in.is_open()) return false;
         
-        // Перемещаем указатель на нужную позицию в файле
+        // перемещаем указатель на нужную позицию в файле
         in.seekg(index * sizeof(TransactionRecord), std::ios::beg);
         if (in.fail()) return false;
 
         in.read(reinterpret_cast<char*>(&record), sizeof(TransactionRecord));
         return in.gcount() == sizeof(TransactionRecord);
     }
-    // Метод вычисления общего количества транзакций в файле
+    // метод вычисления общего количества транзакций в файле
     int Storage::getTransactionsCount() {
-        std::ifstream in(filename, std::ios::binary | std::ios::ate); // Открываем и сразу перемещаем курсор в конец (ate)
+        std::ifstream in(filename, std::ios::binary | std::ios::ate); // открываем и сразу перемещаем курсор в конец (ate)
         if (!in.is_open()) return 0;
-        std::streampos fileSize = in.tellg(); // Получаем размер файла в байтах
+        std::streampos fileSize = in.tellg(); // получаем размер файла в байтах
         in.close();
         return static_cast<int>(fileSize / sizeof(TransactionRecord));
     }
-    // Подсчет транзакций конкретного пользователя (для выделения точного объема памяти)
+    // подсчет транзакций конкретного пользователя (для выделения точного объема памяти)
     int Storage::getUserTransactionsCount(int userId) {
         std::ifstream in(filename, std::ios::binary);
         if (!in.is_open()) return 0;
@@ -55,7 +55,7 @@ namespace PaymentCore {
             return false;
         }
 
-        // Выделяем память в Куче под точное количество найденных транзакций
+        // выделяем память в Куче под точное количество найденных транзакций
         outArray = new TransactionRecord[outSize];
 
         std::ifstream in(filename, std::ios::binary);
@@ -77,16 +77,16 @@ namespace PaymentCore {
         }
         return true;
     }
-    // Компараторы для кастомной сортировки (лямбда-выражения или структуры-предикаты)
+    // компараторы для кастомной сортировки (лямбда-выражения или структуры-предикаты)
     void Storage::sortTransactionsByTimestamp(TransactionRecord* arr, int size, bool ascending) {
         if (ascending) {
-            // Предикат: "левый элемент больше правого" -> меняем местами (сортировка по возрастанию)
+            // предикат: "левый элемент больше правого" -> меняем местами (сортировка по возрастанию)
             insertionSort(arr, size, [](const TransactionRecord& a, const TransactionRecord& b) {
                 return a.timestamp > b.timestamp;
                 });
         }
         else {
-            // Предикат: "левый элемент меньше правого" -> меняем местами (сортировка по убыванию)
+            // предикат: "левый элемент меньше правого" -> меняем местами (сортировка по убыванию)
             insertionSort(arr, size, [](const TransactionRecord& a, const TransactionRecord& b) {
                 return a.timestamp < b.timestamp;
                 });
