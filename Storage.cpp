@@ -91,7 +91,8 @@ namespace PaymentCore {
                 return a.timestamp < b.timestamp;
                 });
         }
-        bool Storage::writeAccount(int index, const Account& acc) {
+    }
+    bool Storage::writeAccount(int index, const Account & acc) {
         std::ofstream out(filename, std::ios::binary | std::ios::in | std::ios::out);
         if (!out.is_open()) {
             // Если файла еще нет, создаем его чистым
@@ -102,7 +103,6 @@ namespace PaymentCore {
         out.write(reinterpret_cast<const char*>(&acc), sizeof(Account));
         return out.good();
     }
-
     bool Storage::readAccount(int index, Account& acc) {
         std::ifstream in(filename, std::ios::binary);
         if (!in.is_open()) return false;

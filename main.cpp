@@ -34,7 +34,7 @@ double getSafeDoubleInput() {
 }
 
 int main() {
-    std::setlocale(LC_ALL, "Russian");
+    std::setlocale(LC_ALL, ".UTF8");
 
     const std::string accountsDb = "accounts.bin";
     const std::string txDb = "transactions.bin";

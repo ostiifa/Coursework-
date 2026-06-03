@@ -3,7 +3,8 @@
 
 #include <string>
 #include <fstream>
-#include "Common.h" // нужен для доступа к константам, если потребуется
+#include "Common.h"
+#include "Account.h"
 
 namespace PaymentCore {
     // структура для записи транзакции в файл
