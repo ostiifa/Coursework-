@@ -23,7 +23,7 @@ namespace PaymentCore {
 		if (!acc.isActive) return;
 		std::cout << "[Счет #" << acc.id << "] "
 			<< "[Владелец: " << acc.ownerName << " | "
-			<< "Баланс: " << acc.balance << " BYN" << std::endl;
+			<< "Баланс: " << acc.balance << " BYN]" << std::endl;
 	}
 
 	void addAccountNode(AccountNode*& head, const Account& acc) {//добавление узла в кучу
